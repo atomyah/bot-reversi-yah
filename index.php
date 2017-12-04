@@ -30,9 +30,41 @@ foreach ($events as $event) {
     error_log('not text message has come');
     continue;
   }
-  //オウム返し parrotting
-//  $bot->replyText($event->getReplyToken(), $event->getText());
-  replyTextMessage($bot, $event->getReplyToken(), $event->getText());
+
+ // 石の配置
+  $stones =
+          [
+              [0,0,0,0,0,0,0,0,],
+              [0,0,0,0,0,0,0,0,],
+              [0,0,0,0,0,0,0,0,],
+              [0,0,0,1,2,0,0,0,],
+              [0,0,0,2,1,0,0,0,],
+              [0,0,0,0,0,0,0,0,],
+              [0,0,0,0,0,0,0,0,],
+              [0,0,0,0,0,0,0,0,]             
+          ];
+  
+  replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+  
+  function replyImagemap($bot, $replyToken, $alternativeText, $stones) {
+    $actionArray = array();
+    
+    array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
+            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
+    
+    $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
+            'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones)) . '/' .uniqid(),
+             $alternativeText,
+             new \LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder(1040, 1040),
+             $actionArray
+    );
+    
+    $response = $bot->replyMessage($replyToken, $imagemapMessageBuilder);
+    if(!$response->isSuceeded()) {
+      error_log('Failed'. $response->getHTTPStatus . ' ' . $response->getRawBody());
+    }
+    
+  }
 }
 
 
