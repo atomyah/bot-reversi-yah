@@ -13,7 +13,7 @@ for($i=0; $i<count($stones); $i++) {
   
   for($j=0; $j<count($row); $j++) {
     if($row[$j] == 1) {
-      $stoneImage = imagecreatefrompng('imgs/reversi_stone_white.php');
+      $stoneImage = imagecreatefrompng('imgs/reversi_stone_white.png');
     } elseif ($row[$j] == 2) {
       $stoneImage = imagecreatefrompng('imgs/reversi_stone_black.png');
     }
