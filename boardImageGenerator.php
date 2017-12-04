@@ -31,7 +31,7 @@ if ($size = GD_BASE_SIZE) {
   $out = $destinationImage;
 } else {
   $out = imagecreatetruecolor($size, $size);
-  imagecopysampled($out, $destinationImage, 0,0,0,0, $size, $size, GD_BASE_SIZE, GD_BASE_SIZE);
+  imagecopyresampled($out, $destinationImage, 0,0,0,0, $size, $size, GD_BASE_SIZE, GD_BASE_SIZE);
 }
 
 ob_start();

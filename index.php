@@ -45,13 +45,19 @@ foreach ($events as $event) {
           ];
   
   replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+}
+
+
   
   function replyImagemap($bot, $replyToken, $alternativeText, $stones) {
     $actionArray = array();
     
+    //アクションの設定
     array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
     
+    
+    //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
             'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones)) . '/' .uniqid(),
              $alternativeText,
@@ -65,7 +71,6 @@ foreach ($events as $event) {
     }
     
   }
-}
 
 
 ?>
