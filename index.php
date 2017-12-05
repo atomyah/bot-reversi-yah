@@ -35,7 +35,7 @@ foreach ($events as $event) {
   }
 
   
-  if(getStoneByUserId($event->getUserId()) === PDO::PARAM_NULL) { // もし初めてのユーザならば
+  if(getStonesByUserId($event->getUserId()) === PDO::PARAM_NULL) { // もし初めてのユーザならば
   // ゲーム開始時の石の配置
     $stones =
           [
