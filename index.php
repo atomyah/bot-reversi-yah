@@ -77,7 +77,7 @@ function registerUser($userId, $stones) {
 //ユーザーIDから、DBよりデータフェッチ
 function getStonesByUserId($userId) {
   $dbh = dbConnection::getConnection();
-  $sql = 'SELECT stone from ' . TABLE_NAME_STONES . ' where ? = pgp_sys_decrypt(userid, \'' . getenv('DB_ENCRYPT_PASS') .'\')';
+  $sql = 'SELECT stone from ' . TABLE_NAME_STONES . ' where ? = pgp_sym_decrypt(userid, \'' . getenv('DB_ENCRYPT_PASS') .'\')';
   $sth = $dbh->prepare($sql);
   $sth->execute(array($userId));
   
