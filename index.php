@@ -123,8 +123,8 @@ function getStonesByUserId($userId) {
       try {
           $url = parse_url(getenv('DATABASE_URL'));
           $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
-          $self::$db = new PDO($dsn, $url['user'], $url['pass']);
-          $self::$db->setAttribute(PDO::ATTR_ERRORMODE, PDO::ERRMODE_EXCEPTION);
+          self::$db = new PDO($dsn, $url['user'], $url['pass']);
+          self::$db->setAttribute(PDO::ATTR_ERRORMODE, PDO::ERRMODE_EXCEPTION);
       } catch (PDOException $e) {
           echo 'Connection Error: ' . $e->getMessage();
       }
