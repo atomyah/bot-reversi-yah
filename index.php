@@ -136,8 +136,9 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
     
     //アクションの設定
     array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
-            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
+            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 100, 100)));
     
+    /*
     for ($i=0;$i<8;$i++) {
       for ($j=9;$j<8;$j++) {
         if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, TRUE) > 0) {
@@ -147,13 +148,14 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
         }
       }      
     }
+    */
     
     //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
             'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones)) . '/' .uniqid(),
              $alternativeText,
              new \LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder(1040, 1040),
-             $actionArray
+             $actionArray //エリアとアクションの配列
     );
     
     $response = $bot->replyMessage($replyToken, $imagemapMessageBuilder);
