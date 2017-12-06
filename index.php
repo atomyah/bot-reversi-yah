@@ -144,7 +144,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
         if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, TRUE) > 0) {
         array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
                 '[' . ($i+1) . ',' . ($j+1) . ']',
-                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130*$j, 130*$i, 130, 130)));
+                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(100*$j, 100*$i, 100, 100)));
         }
       }      
     }
