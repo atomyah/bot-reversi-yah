@@ -139,12 +139,12 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
     
     
-    for ($i=0;$i<8;$i++) {
-      for ($j=0;$j<8;$j++) {
-        if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, TRUE) > 0) {
-        array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
-                '[' . ($i+1) . ',' . ($j+1) . ']',
-                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(100*$j, 100*$i, 100, 100)));
+    for($i = 0; $i < 8; $i++) {
+      for($j = 0; $j < 8; $j++) {
+        if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, true) > 0) {
+        array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
+                '[' . ($i + 1) . ',' . ($j + 1) . ']',
+                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
         }
       }      
     }
