@@ -39,14 +39,14 @@ foreach ($events as $event) {
   // ゲーム開始時の石の配置
     $stones =
           [
-              [0,0,0,0,0,0,0,0,],
-              [0,0,0,0,0,0,0,0,],
-              [0,0,0,0,0,0,0,0,],
-              [0,0,0,1,2,0,0,0,],
-              [0,0,0,2,1,0,0,0,],
-              [0,0,0,0,0,0,0,0,],
-              [0,0,0,0,0,0,0,0,],
-              [0,0,0,0,0,0,0,0,]             
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,1,2,0,0,0],
+              [0,0,0,2,1,0,0,0],
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0]             
           ];
   
     registerUser($event->getUserId(), json_encode($stones));
@@ -90,6 +90,46 @@ function getStonesByUserId($userId) {
 
 
 
+//引数は、配置・行・列・石の色
+function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $colは盤上のマス位置. どちらも0~7
+  $total = 0;
+  
+  $directions = [[-1,0],[-1,1],[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,-1]]; // １マスの四方は８つ。将棋の金みたく。
+  
+  for ($i=0; $i<count($directions);$i++) { //$iは7回まわす
+    $cnt = 1;
+    $rowDiff = $directions[$i][0]; //$rowDiffは$directions配列の[x,y]のxを$i分代入
+    $colDiff = $directions[$i][1]; //$colDiffは$directions配列の[x,y]のyを$i分代入。つまり$directions配列の８通りすべてを試す。
+    $flipCount = 0;
+  
+  
+      while (true) {
+        //盤面の外に出たら抜ける。エラーはUndefined offset: -1。$stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt]はstones配列の値（0か1か2)を返す。
+        if(isset($stones[$row+$rowDiff*$cnt]) || !isset($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt])) {
+          $flipCount = 0;
+          break;
+        }
+        
+        //相手の石(2)なら$flipCountを加算。
+        if($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 2 :1)) {
+          $flipCount++;
+        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 1:2)) {
+          break;  // 自分の石ならループを抜ける
+        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == 0) {
+          $flipCount = 0;
+          break;  // 石がなければループを抜ける
+        }
+      // すべての$directionsが盤外にでるまで$cntを増やしていく。でも結局for文で7回回すのだけど。
+      $cnt++;
+    }
+   $total += $flipCount;
+   
+  }
+  return $total; 
+}
+
+
+
 //イメージマップ作成ファンクション
   function replyImagemap($bot, $replyToken, $alternativeText, $stones) {
     $actionArray = array();
@@ -98,6 +138,15 @@ function getStonesByUserId($userId) {
     array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
     
+    for ($i=0;$i<8;$i++) {
+      for ($j=9;$j<8;$j++) {
+        if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, TRUE) > 0) {
+        array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
+                '[' . ($i+1) . ',' . ($j+1) . ']',
+                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130*$j, 130*$i, 130, 130)));
+        }
+      }      
+    }
     
     //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
