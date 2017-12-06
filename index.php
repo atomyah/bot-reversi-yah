@@ -94,9 +94,9 @@ function getStonesByUserId($userId) {
 function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $colは盤上のマス位置. どちらも0~7
   $total = 0;
   
-  $directions = [[-1,0],[-1,1],[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,-1]]; // １マスの四方は８つ。将棋の金みたく。
+  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1]]; // １マスの四方は８つ。将棋の金みたく。
   
-  for ($i=0; $i<count($directions);$i++) { //$iは7回まわす
+  for ($i=0; $i<count($directions);++$i) { //$iは7回まわす
     $cnt = 1;
     $rowDiff = $directions[$i][0]; //$rowDiffは$directions配列の[x,y]のxを$i分代入
     $colDiff = $directions[$i][1]; //$colDiffは$directions配列の[x,y]のyを$i分代入。つまり$directions配列の８通りすべてを試す。
