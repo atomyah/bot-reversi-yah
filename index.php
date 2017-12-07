@@ -91,50 +91,41 @@ function getStonesByUserId($userId) {
 
 
 //引数は、配置・行・列・石の色
-function getFlipCountByPosAndColor($stones, $row, $col, $isWhite)
-{
+function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $colは盤上のマス位置. どちらも0~7
   $total = 0;
-  // 石から見た各方向への行、列の数の差
-  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1]];
-
-  // 全ての方向をチェック
-  for ($i = 0; $i < count($directions); ++$i) {
-    // 置く場所からの距離。1つずつ進めながらチェックしていく
+  
+  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1]]; // １マスの四方は８つ。将棋の金みたく。
+  
+  for ($i=0; $i<count($directions); ++$i) { //$iは7回まわす
     $cnt = 1;
-    // 行の距離
-    $rowDiff = $directions[$i][0];
-    // 列の距離
-    $colDiff = $directions[$i][1];
-    // はさめる可能性がある数
+    $rowDiff = $directions[$i][0]; //$rowDiffは$directions配列の[x,y]のxを$i分代入
+    $colDiff = $directions[$i][1]; //$colDiffは$directions配列の[x,y]のyを$i分代入。つまり$directions配列の８通りすべてを試す。
     $flipCount = 0;
-
-    while (true) {
-      // 盤面の外に出たらループを抜ける
-      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
-        $flipCount = 0;
-        break;
-      }
-      // 相手の石なら$flipCountを加算
-      if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
-        $flipCount++;
-      }
-      // 自分の石ならループを抜ける
-      elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
-        break;
-      }
-      // どちらの石も置かれてなければループを抜ける
-      elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
-        $flipCount = 0;
-        break;
-      }
-      // 1個進める
+  
+  
+      while (true) {
+        //盤面の外に出たら抜ける。エラーはUndefined offset: -1。$stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt]はstones配列の値（0か1か2)を返す。
+        if(isset($stones[$row+$rowDiff*$cnt]) || !isset($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt])) {
+          $flipCount = 0;
+          break;
+        }
+        
+        //相手の石(2)なら$flipCountを加算。
+        if ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 2 : 1)) {
+          $flipCount++;
+        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 1 : 2)) {
+          break;  // 自分の石ならループを抜ける
+        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == 0) {
+          $flipCount = 0;
+          break;  // 石がなければループを抜ける
+        }
+      // すべての$directionsが盤外にでるまで$cntを増やしていく。でも結局for文で7回回すのだけど。
       $cnt++;
     }
-    // 加算
-    $total += $flipCount;
+   $total += $flipCount;
+   
   }
-  // ひっくり返る総数を返す
-  return $total;
+  return $total; 
 }
 
 
