@@ -111,20 +111,20 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
     
     while (true) {
       //盤面の外に出たらループを抜ける
-      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $coldiff * $cnt])) {
+      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
         $flipCount = 0;
         break;
       }
       // 相手の石なら$flipCountを加算
-      if ($stones[$row + $rowDiff * $cnt][$col + $coldiff * $cnt] == ($isWhite ? 1 : 2)) {
+      if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
         $flipCount++;
       }
       // 自分の石ならループを抜ける
-      elseif ($stones[$row + $rowDiff * $cnt][$col + $coldiff * $cnt] == ($isWhite ? 2 : 1)) {
+      elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
         break;
       // どちらの石も置かれてなければループを抜ける
       }
-      elseif ($stones[$row + $rowDiff * $cnt][$col + $coldiff * $cnt] == 0) {
+      elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
         $flipCount = 0;
         break;
       }
@@ -132,7 +132,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
       $cnt++;
     }
     //加算
-    $total = $flipCount;          
+    $total += $flipCount;          
   }
   //ひっくり返る総数を返す
   return $total;
