@@ -148,7 +148,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
         // タップ可能エリアとアクションを作成し配列に追加          
           array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
                 '[' . ($i + 1) . ',' . ($j + 1) . ']',
-                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
+                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(100 * $j, 100 * $i, 100, 100)));
         }
       }      
     }
