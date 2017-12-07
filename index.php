@@ -96,7 +96,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
   
   $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1]]; // １マスの四方は８つ。将棋の金みたく。
   
-  for ($i=0; $i<count($directions); ++$i) { //$iは7回まわす
+  for ($i=0; $i < count($directions); ++$i) { //$iは7回まわす
     $cnt = 1;
     $rowDiff = $directions[$i][0]; //$rowDiffは$directions配列の[x,y]のxを$i分代入
     $colDiff = $directions[$i][1]; //$colDiffは$directions配列の[x,y]のyを$i分代入。つまり$directions配列の８通りすべてを試す。
@@ -105,19 +105,21 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
   
       while (true) {
         //盤面の外に出たら抜ける。エラーはUndefined offset: -1。$stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt]はstones配列の値（0か1か2)を返す。
-        if(isset($stones[$row+$rowDiff*$cnt]) || !isset($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt])) {
+        if (isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
           $flipCount = 0;
           break;
         }
         
         //相手の石(2)なら$flipCountを加算。
-        if ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 2 : 1)) {
+        if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
           $flipCount++;
-        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == ($isWhite ? 1 : 2)) {
-          break;  // 自分の石ならループを抜ける
-        } elseif ($stones[$row+$rowDiff*$cnt][$col+$colDiff*$cnt] == 0) {
+        // 自分の石ならループを抜ける  
+        } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
+          break; 
+         // 石がなければループを抜ける 
+        } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
           $flipCount = 0;
-          break;  // 石がなければループを抜ける
+          break;
         }
       // すべての$directionsが盤外にでるまで$cntを増やしていく。でも結局for文で7回回すのだけど。
       $cnt++;
