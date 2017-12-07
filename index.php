@@ -139,6 +139,11 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
     array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 100, 100)));
     
+    
+        array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
+            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(300, 200, 100, 100)));
+        
+/*        
    // 全てのマスに対して   
     for($i = 0; $i < 8; $i++) {
       for($j = 0; $j < 8; $j++) {
@@ -152,7 +157,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
         }
       }      
     }
-    
+  */ 
     
     //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
