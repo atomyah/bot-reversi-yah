@@ -144,13 +144,11 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
       for($j = 0; $j < 8; $j++) {
       // 石が置かれていない、かつ
       // そこに置くと相手の石が1つでもひっくり返る場合   
-        if($stones[$i][$j] == 0) {
-        // タップ可能エリアとアクションを作成し配列に追加 
-          print $stones[$i][$j] . '<br>';
-          
-          array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
-                '[' . ($i + 1) . ',' . ($j + 1) . ']',
-                  new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder($j, $i, 100, 100)));
+      if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, true) > 0) {
+        // タップ可能エリアとアクションを作成し配列に追加
+        array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
+            '[' . ($i + 1) . ',' . ($j + 1) . ']',
+            new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
         }
       }      
     }
