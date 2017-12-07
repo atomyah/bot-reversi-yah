@@ -143,21 +143,20 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
         array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(910, 910, 130, 130)));
         
-/*        
+       
    // 全てのマスに対して   
-    for($i = 0; $i < 8; $i++) {
-      for($j = 0; $j < 8; $j++) {
+  for($i = 0; $i < 8; $i++) {
+    for($j = 0; $j < 8; $j++) {
       // 石が置かれていない、かつ
-      // そこに置くと相手の石が1つでもひっくり返る場合   
+      // そこに置くと相手の石が1つでもひっくり返る場合
       if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, true) > 0) {
         // タップ可能エリアとアクションを作成し配列に追加
         array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
             '[' . ($i + 1) . ',' . ($j + 1) . ']',
             new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
-        }
-      }      
+      }
     }
-  */ 
+  }
     
     //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
