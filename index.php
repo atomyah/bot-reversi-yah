@@ -164,7 +164,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
     
     $response = $bot->replyMessage($replyToken, $imagemapMessageBuilder);
     if(!$response->isSucceeded()) {
-      error_log('Failed!'. $response->getHTTPStatus . ' ' . $response->getRawBody());
+      error_log('Failed! Ahan'. $response->getHTTPStatus . ' ' . $response->getRawBody());
     }
     
   }
