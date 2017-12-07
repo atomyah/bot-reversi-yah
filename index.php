@@ -96,10 +96,10 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
   $total = 0;
   
   // 石から見た各方向への行、列の数の差
-  $directions = [[-1,0], [-1,1], [0,1], [1,0], [1,1], [1,0], [1,-1], [0,-1],[-1,-1]];
+  $directions = [[-1,0], [-1,1], [0,1], [1,0], [1,1], [1,-1], [0,-1],[-1,-1]];
   
   //すべての方向をチェック
-  for ($i = 0; $i < count($directions); ++$i) {
+  for ($i = 0; $i < count($directions); $i++) {
     //置く場所からの距離。１つづつ進めながらチェックしていく。
     $cnt = 1;
     //行の距離
