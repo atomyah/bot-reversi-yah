@@ -141,7 +141,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
     
     
         array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
-            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(300, 200, 100, 100)));
+            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(100, 100, 100, 100)));
         
 /*        
    // 全てのマスに対して   
