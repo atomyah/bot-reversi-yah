@@ -94,9 +94,9 @@ function getStonesByUserId($userId) {
 function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $colは盤上のマス位置. どちらも0~7
   $total = 0;
   
-  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, 0],[1, -1],[0, -1],[-1, -1]]; // １マスの四方は８つ。将棋の金みたく。
+  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]]; // １マスの四方は８つ。将棋の金みたく。
   
-  for ($i=0; $i<count($directions);++$i) { //$iは7回まわす
+  for ($i=0; $i<count($directions);$i++) { //$iは7回まわす
     $cnt = 1;
     $rowDiff = $directions[$i][0]; //$rowDiffは$directions配列の[x,y]のxを$i分代入
     $colDiff = $directions[$i][1]; //$colDiffは$directions配列の[x,y]のyを$i分代入。つまり$directions配列の８通りすべてを試す。
@@ -132,17 +132,21 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) { // $row, $co
 
 //イメージマップ作成ファンクション
   function replyImagemap($bot, $replyToken, $alternativeText, $stones) {
+   // アクションの配列
     $actionArray = array();
     
-    //アクションの設定
+   // 1つ以上のエリアが必要なためダミーのタップ可能エリアを追加
     array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
-            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
+            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 50, 50)));
     
-    
+   // 全てのマスに対して   
     for($i = 0; $i < 8; $i++) {
       for($j = 0; $j < 8; $j++) {
+      // 石が置かれていない、かつ
+      // そこに置くと相手の石が1つでもひっくり返る場合   
         if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, true) > 0) {
-        array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
+        // タップ可能エリアとアクションを作成し配列に追加          
+          array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
                 '[' . ($i + 1) . ',' . ($j + 1) . ']',
                   new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
         }
