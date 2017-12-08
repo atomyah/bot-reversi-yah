@@ -59,7 +59,10 @@ foreach ($events as $event) {
     $stones = getStonesByUserID($event->getUserId());
   }
   
+  $tappedArea = json_decode($event->getText());
   replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+  
+  $bot->replyText($event->getReplyToken(), $tappedArea);
 
 }  
 
@@ -152,9 +155,6 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
             new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
     
     
-        array_push($actionArray, new \LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder('-', 
-            new \LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(910, 910, 130, 130)));
-        
        
    // 全てのマスに対して   
   for($i = 0; $i < 8; $i++) {
