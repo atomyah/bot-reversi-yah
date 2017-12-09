@@ -213,7 +213,7 @@ function placeStone($stones, $row, $col, $isWhite) {
       if($stones[$i][$j] == 0 && getFlipCountByPosAndColor($stones, $i, $j, true) > 0) {
         // タップ可能エリアとアクションを作成し配列に追加
         array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
-            '[' . ($i + 1) . ',' . ($j + 1) . '] ' . $total,
+            '[' . ($i + 1) . ',' . ($j + 1) . '] ' . getFlipCountByPosAndColor($stones, $i, $j, true),
             new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(130 * $j, 130 * $i, 130, 130)));
       }
     }
