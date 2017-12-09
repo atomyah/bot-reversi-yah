@@ -4,6 +4,8 @@ require __DIR__ . '/functions.php';
 
 define('TABLE_NAME_STONES', 'stones');
 
+$stones = array();
+
 
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
 
