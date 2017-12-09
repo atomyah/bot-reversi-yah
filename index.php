@@ -64,13 +64,11 @@ foreach ($events as $event) {
   // 入力されたテキストを[行,列]の配列に変換
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
-  placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, $isWhite = true);
-  /*
   $isWhite = True;
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
-  */
+  placeStone($stones, $row, $col, true);
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
@@ -197,7 +195,7 @@ function placeStone($stones, $row, $col, $isWhite) {
     }
   }
   // 新たに石を置く
-  $stones[$row][$col] = ($isWhite ? 1 : 2);
+  //$stones[$row][$col] = ($isWhite ? 1 : 2);
 }
 
 
