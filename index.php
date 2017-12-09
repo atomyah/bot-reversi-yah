@@ -65,11 +65,11 @@ foreach ($events as $event) {
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
   //placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
+  $isWhite = True;
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
-  $stones[$row][$col] = 1;
+  $stones[$row][$col] = ($isWhite ? 1 : 2);
   
-  //replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
