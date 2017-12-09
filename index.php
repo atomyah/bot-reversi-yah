@@ -68,38 +68,8 @@ foreach ($events as $event) {
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
-  //placeStone($stones, $row, $col, $isWhite);
-  
-  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
-
-  for ($i = 0; $i < count($directions); $i++) {
-    $cnt = 1;
-    $rowDiff = $directions[$i][0];
-    $colDiff = $directions[$i][1];
-    $flipCount = 0;
-
-    while (true) {
-      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
-        $flipCount = 0;
-        break;
-      }
-      if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
-        $flipCount++;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
-        if ($flipCount > 0) {
-          // ひっくり返す
-          for ($i = 0; $i < $flipCount; $i++) {
-            $stones[$row + $rowDiff * ($i + 1)][$col + $colDiff * ($i + 1)] = ($isWhite ? 1 : 2);
-          }
-        }
-        break;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
-        $flipCount = 0;
-        break;
-      }
-      $cnt++;
-    }
-  }  
+  turnStone($stones, $row, $col, TRUE);
+ 
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
@@ -192,7 +162,6 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
   
 
 // 石を置く。石の配置は参照渡し
-/*
 function placeStone($stones, $row, $col, $isWhite) {
   // ひっくり返す。処理の流れは
   // getFlipCountByPosAndColorとほぼ同じ
@@ -229,8 +198,6 @@ function placeStone($stones, $row, $col, $isWhite) {
   // 新たに石を置く
   //$stones[$row][$col] = ($isWhite ? 1 : 2);
 }
- * 
- */
 
 
 
