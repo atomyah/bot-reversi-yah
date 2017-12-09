@@ -115,43 +115,6 @@ function replyImageMessage($bot, $replyToken, $originalImageUrl, $previewImageUr
     
   }
   
-  
-  function turnStone($stones, $row, $col, $isWhite) {
-  // ひっくり返す。処理の流れは
-  // getFlipCountByPosAndColorとほぼ同じ
-  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
-
-  for ($i = 0; $i < count($directions); $i++) {
-    $cnt = 1;
-    $rowDiff = $directions[$i][0];
-    $colDiff = $directions[$i][1];
-    $flipCount = 0;
-
-    while (true) {
-      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
-        $flipCount = 0;
-        break;
-      }
-      if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
-        $flipCount++;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
-        if ($flipCount > 0) {
-          // ひっくり返す
-          for ($i = 0; $i < $flipCount; $i++) {
-            $stones[$row + $rowDiff * ($i + 1)][$col + $colDiff * ($i + 1)] = ($isWhite ? 1 : 2);
-          }
-        }
-        break;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
-        $flipCount = 0;
-        break;
-      }
-      $cnt++;
-    }
-  }
-  // 新たに石を置く
-  //$stones[$row][$col] = ($isWhite ? 1 : 2);
-}
 
 
 ?>
