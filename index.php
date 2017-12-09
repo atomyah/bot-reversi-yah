@@ -68,7 +68,7 @@ foreach ($events as $event) {
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
-  placeStone($stones, 4, 2, true);
+  placeStone($stones, 4, 2, $isWhite);
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
