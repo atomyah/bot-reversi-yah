@@ -66,7 +66,7 @@ foreach ($events as $event) {
   //placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
   $stones[0][0] = 1;
   
-  replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
+  //replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
