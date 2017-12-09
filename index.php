@@ -64,7 +64,7 @@ foreach ($events as $event) {
   // 入力されたテキストを[行,列]の配列に変換
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
-  placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
+  placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, $isWhite = true);
   /*
   $isWhite = True;
   $row = $tappedArea[0] - 1;
