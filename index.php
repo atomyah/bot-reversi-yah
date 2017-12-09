@@ -64,20 +64,9 @@ foreach ($events as $event) {
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
   //placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
+  $stones[0][0] = 1;
   
-  $stones = 
-    [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 2, 0, 0, 0],
-    [0, 0, 0, 2, 1, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    ];
-  
-//  replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
+  replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
