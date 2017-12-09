@@ -64,7 +64,7 @@ foreach ($events as $event) {
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
   //placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
-  $stones[1][2] = 2;
+  $stones[1][2] = 1;
   
   //replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
   
