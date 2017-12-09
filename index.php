@@ -4,7 +4,6 @@ require __DIR__ . '/functions.php';
 
 define('TABLE_NAME_STONES', 'stones');
 
-$stones = array();
 
 
 $httpClient = new \LINE\LINEBot\HTTPClient\CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
@@ -66,9 +65,9 @@ foreach ($events as $event) {
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
   //placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
-  $string = '[2,2]';
-  $stones = json_decode($string);
-  $stones[0][1] = 2;
+  $row = $tappedArea[0];
+  $col = $tappedArea[1];
+  $stones[$row][$col] = 1;
   
   //replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
   
