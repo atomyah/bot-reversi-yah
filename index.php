@@ -64,6 +64,9 @@ foreach ($events as $event) {
   $tappedArea = json_decode($event->getText());
   // ユーザーの石を置く
   placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
+  
+  replyTextMessage($bot, $event->getReplyToken(), json_encode($stones));
+  
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
 
@@ -189,11 +192,7 @@ function placeStone($stones, $row, $col, $isWhite) {
     }
   }
   // 新たに石を置く
-  if($isWhite == TRUE) {
-    $stones[$row][$col] = 1;
-  } elseif ($isWhite == FALSE) {
-    $stones[$row][$col] = 2;    
-  }
+  $stones[$row][$col] = ($isWhite ? 1 : 2);
 }
 
 
