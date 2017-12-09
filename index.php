@@ -68,7 +68,7 @@ foreach ($events as $event) {
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
-  placeStone($stones, 4, 2, $isWhite);
+  placeStone($stones, $row, $col, $isWhite);
   
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
@@ -166,7 +166,7 @@ function placeStone($stones, $row, $col, $isWhite) {
   // getFlipCountByPosAndColorとほぼ同じ
   $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
 
-  for ($i = 0; $i < count($directions); ++$i) {
+  for ($i = 0; $i < count($directions); $i++) {
     $cnt = 1;
     $rowDiff = $directions[$i][0];
     $colDiff = $directions[$i][1];
