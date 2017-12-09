@@ -102,6 +102,7 @@ foreach ($events as $event) {
   }
  //ここまで
   
+  
   // ユーザーの情報を更新
   updateUser($event->getUserId(), json_encode($stones));
 
