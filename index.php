@@ -116,6 +116,14 @@ function updateUser($userId, $stones) {
 }
 
 
+// ユーザーの情報をDBから削除
+function deleteUser($userId) {
+  $dbh = dbConnection::getConnection();
+  $sql = 'DELETE FROM ' . TABLE_NAME_STONES . ' where ? = pgp_sym_decrypt(userid, \'' . getenv('DB_ENCRYPT_PASS') . '\')';
+  $sth = $dbh->prepare($sql);
+  $sth->execute(array($userId)); 
+}
+
 // ユーザーIDを元にデータベースから情報を取得
 function getStonesByUserId($userId) {
   $dbh = dbConnection::getConnection();
