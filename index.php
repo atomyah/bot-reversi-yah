@@ -83,7 +83,7 @@ foreach ($events as $event) {
   } else if(!getCanPlaceByColor($stones, true) && getCanPlaceByColor($stones, false)) {
     // ユーザーが置けるようになるまで相手が石を置く
     while(!getCanPlaceByColor($stones, true)) {
-      placeAIStone($stones);
+      placeAIStone();
       updateUser($bot, json_encode($stones));
       // どちらの石も置けなくなったらゲームオーバー
       if(!getCanPlaceByColor($stones, true) && !getCanPlaceByColor($stones, false)) {
@@ -286,7 +286,7 @@ function placeStone(&$stones, $row, $col, $isWhite) {
 
 
 
-// 敵の石を置く
+// 敵の石を置く。石の配置&$stonesは参照渡し
 function placeAIStone(&$stones) {
   //強い場所の配列。強い順
   $strongArray = [0, 7, 56, 63, 2, 5, 16, 18, 21, 23, 40, 42, 45, 47, 58, 61];
@@ -297,7 +297,7 @@ function placeAIStone(&$stones) {
   //どちらにも属さない場所
   $otherArray = [];
   for ($i = 0; $i < count($stones) * count($stones[0]); $i++) {
-    if (!in_array($i, $strongArray) && in_array($i, $weakArray)) {
+    if (!in_array($i, $strongArray) && !in_array($i, $weakArray)) {
       array_push($otherArray, $i);
     }
   }
