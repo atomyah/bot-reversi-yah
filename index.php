@@ -70,6 +70,7 @@ foreach ($events as $event) {
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
   
+  /*
   $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
 
   for ($i = 0; $i < count($directions); $i++) {
@@ -100,12 +101,14 @@ foreach ($events as $event) {
       $cnt++;
     }
   }
- //ここまで
+ //ユーザーの石を置いて相手をひっくり返す。ここまで
+  */
   
   
-  // ユーザーの情報を更新
+  // ユーザーのDB情報を更新
   updateUser($event->getUserId(), json_encode($stones));
 
+  // Imagemapを返信
   replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
 
 }  
@@ -193,9 +196,9 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
 }
   
 
-// 石を置く。石の配置は参照渡し
-/*
-function placeStone($stones, $row, $col, $isWhite) {
+// 石を置く。石の配置は参照渡し（諦めてコメントアウトしたファンクション）
+
+function placeStone(&$stones, $row, $col, $isWhite) {
   // ひっくり返す。処理の流れは
   // getFlipCountByPosAndColorとほぼ同じ
   $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
@@ -231,7 +234,10 @@ function placeStone($stones, $row, $col, $isWhite) {
   // 新たに石を置く
   //$stones[$row][$col] = ($isWhite ? 1 : 2);
 }
-*/
+
+
+
+// 敵の石を置く
 
 
 //イメージマップ作成ファンクション
