@@ -66,40 +66,9 @@ foreach ($events as $event) {
   
     // ユーザーの石を置く
   placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
-  /*
-  $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
 
-  for ($i = 0; $i < count($directions); $i++) {
-    $cnt = 1;
-    $rowDiff = $directions[$i][0];
-    $colDiff = $directions[$i][1];
-    $flipCount = 0;
-
-    while (true) {
-      if (!isset($stones[$row + $rowDiff * $cnt]) || !isset($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt])) {
-        $flipCount = 0;
-        break;
-      }
-      if ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 2 : 1)) {
-        $flipCount++;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == ($isWhite ? 1 : 2)) {
-        if ($flipCount > 0) {
-          // ひっくり返す
-          for ($i = 0; $i < $flipCount; $i++) {
-            $stones[$row + $rowDiff * ($i + 1)][$col + $colDiff * ($i + 1)] = ($isWhite ? 1 : 2);
-          }
-        }
-        break;
-      } elseif ($stones[$row + $rowDiff * $cnt][$col + $colDiff * $cnt] == 0) {
-        $flipCount = 0;
-        break;
-      }
-      $cnt++;
-    }
-  }
- //ユーザーの石を置いて相手をひっくり返す。ここまで
-  */
-  
+  //相手の黒石を置く
+  placeAIStone($stones);
   
   // ユーザーのDB情報を更新
   updateUser($event->getUserId(), json_encode($stones));
@@ -233,6 +202,38 @@ function placeStone(&$stones, $row, $col, $isWhite) {
 
 
 // 敵の石を置く
+function placeAIStone(&$stones) {
+  //強い場所の配列。強い順
+  $strongArray = [0, 7, 56, 63, 2, 5, 16, 18, 21, 23, 40, 42, 45, 47, 58, 61];
+  
+  //弱い場所の配列。強い順
+  $weakArray = [1, 6, 8, 15, 48, 57, 62, 9, 14, 49, 54];
+  
+  //どちらにも属さない場所
+  $otherArray = [];
+  for ($i = 0; $i < count($stones) * count($stones[0]); $i++) {
+    if (!in_array($i, $strongArray) && in_array($i, $weakArray)) {
+      array_push($otherArray, $i);
+    }
+  }
+  
+  //ランダムにする
+  shuffle($otherArray);
+  
+  //すべてのマスの強い順に並べた配列
+  $posArray = array_merge($strongArray, $otherArray, $weakArray);
+  
+  for ($i = 0; $i < count($posArray); $i++) {
+    $pos = [$posArray[$i] / 8, $posArray[$i] % 8];
+    if ($stones[$pos[0]][$pos[1]] == 0) {
+      if (getFlipCountByPosAndColor($stones, $pos[0], $pos[1], FALSE) > 0) {
+        placeStone($stones, $pos[0], $pos[1], FALSE);
+        break;
+      }
+    }
+  }
+  
+}
 
 
 //イメージマップ作成ファンクション
