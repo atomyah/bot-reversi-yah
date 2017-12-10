@@ -74,23 +74,23 @@ foreach ($events as $event) {
   // ユーザーのDB情報を更新
   updateUser($event->getUserId(), json_encode($stones));
   
-  //ユーザーもCPUも石を置けない時
-  if(!getCanPlaceBYColor($stones, TRUE) && !getCanPlaceBYColor($stones, FALSE)) {
-    //ゲームオーバー
+   // ユーザーも相手も石を置くことができない時
+  if(!getCanPlaceByColor($stones, true) && !getCanPlaceByColor($stones, false)) {
+    // ゲームオーバー
     endGame($bot, $event->getReplyToken(), $event->getUserId(), $stones);
     continue;
-    //CPUのみ置ける時
-  } else if (!getCanPlaceBYColor($stones, TRUE) && getCanPlaceBYColor($stones, FALSE)) {
-    while (!getCanPlaceBYColor($stones, TRUE)) {
-      placeAIStone($stones);
-      updateUser($event->getUserId(), json_encode($stones));
-      //どちらの石も置けなくなった時
-      if(!getCanPlaceBYColor($stones, TRUE) && !getCanPlaceBYColor($stones, FALSE)) {
-      //ゲームオーバー
-      endGame($bot, $event->getReplyToken(), $event->getUserId(), $stones);
-      continue 2;  
+  // 相手のみが置ける時
+  } else if(!getCanPlaceByColor($stones, true) && getCanPlaceByColor($stones, false)) {
+    // ユーザーが置けるようになるまで相手が石を置く
+    while(!getCanPlaceByColor($stones, true)) {
+      placeAIStone();
+      updateUser($bot, json_encode($stones));
+      // どちらの石も置けなくなったらゲームオーバー
+      if(!getCanPlaceByColor($stones, true) && !getCanPlaceByColor($stones, false)) {
+        endGame($bot, $event->getReplyToken(), $event->getUserId(), $stones);
+        continue 2;
+      }
     }
-   }
  }
 
   // Imagemapを返信
@@ -135,62 +135,64 @@ function endGame($bot, $replyToken, $userId, $stones) {
   // それぞれの石の数をカウント
   $white = 0;
   $black = 0;
-  for ($i = 0; $i < count($stones); $i++) {
-    for ($j = 0; $j < count($stones[$i]); $j++) {
-      if ($stones[$i][$j] == 1) {
+  for($i = 0; $i < count($stones); $i++) {
+    for($j = 0; $j < count($stones[$i]); $j++) {
+      if($stones[$i][$j] == 1) {
         $white++;
-      } else if ($stones[$i][$j] == 2) {
+      } else if($stones[$i][$j] == 2) {
         $black++;
       }
     }
   }
 
-
-  //送るテキスト
-  if ($white == $black) {
-    $message = '引き分け！' . sprintf('白 : %d 対 黒 : %d', $white, $black);
+  // 送るテキスト
+  if($white == $black) {
+    $message = '引き分け！' . sprintf('白 : %d、 黒 %d', $white, $black);
   } else {
-    $message = ($white > $black ? 'あなた' : 'CPU') . 'の勝ち！' . sprintf('白 : %d 対 黒 : %d', $white, $black);
+    $message = ($white > $black ? 'あなた' : 'CPU') . 'の勝ち！' . sprintf('白 : %d、 黒 : %d', $white, $black);
   }
 
-  
   // 盤面とダミーエリアのみのImagemapを生成
   $actionArray = array();
   array_push($actionArray, new LINE\LINEBot\ImagemapActionBuilder\ImagemapMessageActionBuilder(
-          '-',
-          new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
-  
-  $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder(
-          'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones) . '/' . uniqid()),
-           $message,
-           new LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder(1024, 1024),
-           $actionArray);
-  
-  //テキストメッセージ
+    '-',
+    new LINE\LINEBot\ImagemapActionBuilder\AreaBuilder(0, 0, 1, 1)));
+
+  $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
+    'https://' . $_SERVER['HTTP_HOST'] .  '/images/' . urlencode(json_encode($stones) . '/' . uniqid()),
+    $message,
+    new LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder(1040, 1040),
+    $actionArray
+  );
+
+  // テキストのメッセージ
   $textMessage = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
-  
-  //スタンプのメッセージ
-  $stickerMessage = ($white >= $black) ? new LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 114) : new LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 111);
-  
-  //Imagemap, テキスト、スタンプを送信
-  $replyMultiMessage($bot, $replyToken, $imagemapMessageBuilder, $textMessage, $stickerMessage);
+  // スタンプのメッセージ
+  $stickerMessage = ($white >= $black)
+    ? new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 114)
+    : new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(1, 111);
+  // データベースからユーザーを削除
+  deleteUser($userId);
+  // Imagemap、テキスト、スタンプを返信
+  replyMultiMessage($bot, $replyToken, $imagemapMessageBuilder, $textMessage, $stickerMessage);
 }
 
 
-//石が置ける場所があるか調べる
-//引数は現在の石の配置、石の色
-function getCanPlaceBYColor($stones, $isWhite) {
+
+// 石が置ける場所があるかを調べる
+// 引数は現在の石の配置、石の色
+function getCanPlaceByColor($stones, $isWhite) {
   for ($i = 0; $i < count($stones); $i++) {
     for ($j = 0; $j < count($stones[$i]); $j++) {
       if ($stones[$i][$j] == 0) {
-        //ひとつでもひっくり返るならTRUE
+        // 1つでもひっくり返るなら真
         if (getFlipCountByPosAndColor($stones, $i, $j, $isWhite) > 0) {
-          return TRUE;
+          return true;
         }
       }
     }
   }
-  return FALSE;
+  return false;
 }
 
 
