@@ -82,8 +82,8 @@ foreach ($events as $event) {
     //CPUのみ置ける時
   } else if (!getCanPlaceBYColor($stones, TRUE) && getCanPlaceBYColor($stones, FALSE)) {
     while (!getCanPlaceBYColor($stones, TRUE)) {
-      placeAIStone();
-      updateUser($bot, json_encode($stones));
+      placeAIStone($stones);
+      updateUser($event->getUserId(), json_encode($stones));
       //どちらの石も置けなくなった時
       if(!getCanPlaceBYColor($stones, TRUE) && !getCanPlaceBYColor($stones, FALSE)) {
       //ゲームオーバー
