@@ -64,11 +64,6 @@ foreach ($events as $event) {
   // 入力されたテキストを[行,列]の配列に変換
   $tappedArea = json_decode($event->getText());
   
-  // ユーザーの石を置いて相手をひっくり返す
-  $isWhite = True;
-  $row = $tappedArea[0] - 1;
-  $col = $tappedArea[1] - 1;
-  $stones[$row][$col] = ($isWhite ? 1 : 2);
     // ユーザーの石を置く
   placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
   /*
@@ -197,8 +192,7 @@ function getFlipCountByPosAndColor($stones, $row, $col, $isWhite) {
 }
   
 
-// 石を置く。石の配置は参照渡し（諦めてコメントアウトしたファンクション）
-
+// 石を置く。石の配置&$stonesは参照渡し
 function placeStone(&$stones, $row, $col, $isWhite) {
   // ひっくり返す。処理の流れは
   // getFlipCountByPosAndColorとほぼ同じ
@@ -232,8 +226,8 @@ function placeStone(&$stones, $row, $col, $isWhite) {
       $cnt++;
     }
   }
-  // 新たに石を置く
-  //$stones[$row][$col] = ($isWhite ? 1 : 2);
+   //新たに石を置く
+  $stones[$row][$col] = ($isWhite ? 1 : 2);
 }
 
 
