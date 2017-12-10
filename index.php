@@ -66,6 +66,9 @@ foreach ($events as $event) {
   
     // ユーザーの石を置く
   placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
+  
+    // Imagemapを返信
+  replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
 
   //相手の黒石を置く
   placeAIStone($stones);
