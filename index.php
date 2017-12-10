@@ -69,7 +69,8 @@ foreach ($events as $event) {
   $row = $tappedArea[0] - 1;
   $col = $tappedArea[1] - 1;
   $stones[$row][$col] = ($isWhite ? 1 : 2);
-  
+    // ユーザーの石を置く
+  placeStone($stones, $tappedArea[0] - 1, $tappedArea[1] - 1, true);
   /*
   $directions = [[-1, 0],[-1, 1],[0, 1],[1, 0],[1, 1],[1, -1],[0, -1],[-1, -1]];
 
