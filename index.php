@@ -90,7 +90,8 @@ foreach ($events as $event) {
       endGame($bot, $event->getReplyToken(), $event->getUserId(), $stones);
       continue 2;  
     }
-  }
+   }
+ }
 
   // Imagemapを返信
   replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
