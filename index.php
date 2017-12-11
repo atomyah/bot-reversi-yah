@@ -37,7 +37,7 @@ foreach ($events as $event) {
   
   
   //リッチコンテンツがタップされたとき
-  if(substr($event->getText(), 0, 4, 'cmd_')) {
+  if(substr($event->getText(), 0, 4 == 'cmd_')) {
     //盤面の確認
     if(substr($event->getText(), 4) == 'check_board') {
       if(getStonesByUserId($event->getUserId()) != PDO::PARAM_NULL) {
