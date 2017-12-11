@@ -36,34 +36,35 @@ foreach ($events as $event) {
   }
   
   
-  //リッチコンテンツがタップされたとき
-  if(substr($event->getText(), 0, 4 == 'cmd_')) {
-    //盤面の確認
+  // リッチコンテンツがタップされた時
+  if(substr($event->getText(), 0, 4) == 'cmd_') {
+    // 盤面の確認
     if(substr($event->getText(), 4) == 'check_board') {
       if(getStonesByUserId($event->getUserId()) != PDO::PARAM_NULL) {
         $stones = getStonesByUserId($event->getUserId());
-        replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+        replyImagemap($bot, $event->getReplyToken(), '盤面',  $stones);
       }
-       
-    //情勢の確認
-    } else if(substr($event->getText(), 4 == 'check_count')) {
+    }
+    // 情勢の確認
+    else if(substr($event->getText(), 4) == 'check_count') {
       if(getStonesByUserId($event->getUserId()) != PDO::PARAM_NULL) {
         $stones = getStonesByUserId($event->getUserId());
         $white = 0;
         $black = 0;
-        for ($i = 0; $i < count($stones); $i++) {
-          for ($j = 0; $j < count($stones[$i]); $j++) {
+        for($i = 0; $i < count($stones); $i++) {
+          for($j = 0; $j < count($stones[$i]); $j++) {
             if($stones[$i][$j] == 1) {
               $white++;
-            } else if ($stones[$i][$j] == 2) {
+            } else if($stones[$i][$j] == 2) {
               $black++;
             }
           }
         }
-        replyTextMessage($bot, $event->getReplyToken(), sprintf('白：%d、黒：%d', $white, $black));
-      }     
-    //ゲーム中断し新ゲームを開始  
-    } else if(substr($event->getText(), 4 == 'newgame')) {
+        replyTextMessage($bot, $event->getReplyToken(), sprintf('白 : %d、黒 : %d', $white, $black));
+      }
+    }
+    // ゲームを中断し新ゲームを開始
+    else if(substr($event->getText(), 4) == 'newgame') {
       deleteUser($event->getUserId());
       $stones =
       [
@@ -77,10 +78,12 @@ foreach ($events as $event) {
       [0, 0, 0, 0, 0, 0, 0, 0],
       ];
       registerUser($event->getUserId(), json_encode($stones));
-      replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
-    //遊び方 
-    } else if(substr($event->getText(), 4 == 'help')) {
-      replyTextMessage($bot, $event->getReplyToken(), 'あなたは常に白です。送られた盤面上の置きたい場所をタップしてね！バグった時はオプションの盤面再送を！');      
+
+      replyImagemap($bot, $event->getReplyToken(), '盤面', $stones, null);
+    }
+    // 遊び方
+    else if(substr($event->getText(), 4) == 'help') {
+      replyTextMessage($bot, $event->getReplyToken(), 'あなたは常に白番です。送られた盤面上の置きたい場所をタップしてね！バグった時はオプションの盤面再送から！');
     }
     continue;
   }
@@ -179,13 +182,14 @@ function deleteUser($userId) {
 // ユーザーIDを元にデータベースから情報を取得
 function getStonesByUserId($userId) {
   $dbh = dbConnection::getConnection();
-  $sql = 'SELECT stone from ' . TABLE_NAME_STONES . ' where ? = pgp_sym_decrypt(userid, \'' . getenv('DB_ENCRYPT_PASS') .'\')';
+  $sql = 'select stone from ' . TABLE_NAME_STONES . ' where ? = pgp_sym_decrypt(userid, \'' . getenv('DB_ENCRYPT_PASS') . '\')';
   $sth = $dbh->prepare($sql);
   $sth->execute(array($userId));
-  
+  // レコードが存在しなければNULL
   if (!($row = $sth->fetch())) {
     return PDO::PARAM_NULL;
   } else {
+    // 石の配置を連想配列に変換し返す
     return json_decode($row['stone']);
   }
 }
