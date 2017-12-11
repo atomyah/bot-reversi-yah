@@ -190,7 +190,9 @@ function getStonesByUserId($userId) {
     return PDO::PARAM_NULL;
   } else {
     // 石の配置を連想配列に変換し返す
-    return json_decode($row['stone']);
+    $stone = $row['stone'];
+    $stones = json_decode($stone);
+    return $stones;
   }
 }
 
