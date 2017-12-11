@@ -35,7 +35,7 @@ foreach ($events as $event) {
     continue;
   }
   
-/*  
+  
   // リッチコンテンツがタップされた時
   if(substr($event->getText(), 0, 4) == 'cmd_') {
     // 盤面の確認
@@ -87,7 +87,7 @@ foreach ($events as $event) {
     }
     continue;
   }
-*/ 
+  
   
 
   // ユーザーの情報がデータベースに存在しない時
@@ -113,7 +113,7 @@ foreach ($events as $event) {
   // 存在する時
   } else {
     // データベースから現在の石の配置を取得
-    $stones = getStonesByUserID($event->getUserId());
+    $stones = getStonesByUserId($event->getUserId());
   }
   
   // 入力されたテキストを[行,列]の配列に変換
@@ -190,9 +190,7 @@ function getStonesByUserId($userId) {
     return PDO::PARAM_NULL;
   } else {
     // 石の配置を連想配列に変換し返す
-    $stone = $row['stone'];
-    $stones = json_decode($stone);
-    return $stones;
+    return json_decode($row['stone']);
   }
 }
 
