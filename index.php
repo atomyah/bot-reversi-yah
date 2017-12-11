@@ -83,8 +83,8 @@ foreach ($events as $event) {
   } else if(!getCanPlaceByColor($stones, true) && getCanPlaceByColor($stones, false)) {
     // ユーザーが置けるようになるまで相手が石を置く
     while(!getCanPlaceByColor($stones, true)) {
-      placeAIStone($stones);
-      updateUser($event->getUserId(), json_encode($stones));
+      placeAIStone();
+      updateUser($bot, json_encode($stones));
       // どちらの石も置けなくなったらゲームオーバー
       if(!getCanPlaceByColor($stones, true) && !getCanPlaceByColor($stones, false)) {
         endGame($bot, $event->getReplyToken(), $event->getUserId(), $stones);
