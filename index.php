@@ -34,6 +34,58 @@ foreach ($events as $event) {
     error_log('not text message has come');
     continue;
   }
+  
+  
+  //リッチコンテンツがタップされたとき
+  if(substr($event->getText(), 0, 4, 'cmd_')) {
+    //盤面の確認
+    if(substr($event->getText(), 4) == 'check_board') {
+      if(getStonesByUserId($event->getUserId()) != PDO::PARAM_NULL) {
+        $stones = getStonesByUserId($event->getUserId());
+        replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+      }
+       
+    //情勢の確認
+    } else if(substr($event->getText(), 4 == 'check_count')) {
+      if(getStonesByUserId($event->getUserId()) != PDO::PARAM_NULL) {
+        $stones = getStonesByUserId($event->getUserId());
+        $white = 0;
+        $black = 0;
+        for ($i = 0; $i < count($stones); $i++) {
+          for ($j = 0; $j < count($stones[$i]); $j++) {
+            if($stones[$i][$j] == 1) {
+              $white++;
+            } else if ($stones[$i][$j] == 2) {
+              $black++;
+            }
+          }
+        }
+        replyTextMessage($bot, $event->getReplyToken(), sprintf('白：%d、黒：%d', $white, $black));
+      }     
+    //ゲーム中断し新ゲームを開始  
+    } else if(substr($event->getText(), 4 == 'newgame')) {
+      deleteUser($event->getUserId());
+      $stones =
+      [
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 1, 2, 0, 0, 0],
+      [0, 0, 0, 2, 1, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0],
+      ];
+      registerUser($event->getUserId(), json_encode($stones));
+      replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+    //遊び方 
+    } else if(substr($event->getText(), 4 == 'help')) {
+      replyTextMessage($bot, $event->getReplyToken(), 'あなたは常に白です。送られた盤面上の置きたい場所をタップしてね！バグった時はオプションの盤面再送を！');      
+    }
+    continue;
+  }
+  
+  
 
   // ユーザーの情報がデータベースに存在しない時
   if(getStonesByUserId($event->getUserId()) === PDO::PARAM_NULL) { // もし初めてのユーザならば
