@@ -35,7 +35,7 @@ foreach ($events as $event) {
     continue;
   }
   
-  
+/*  
   // リッチコンテンツがタップされた時
   if(substr($event->getText(), 0, 4) == 'cmd_') {
     // 盤面の確認
@@ -87,7 +87,7 @@ foreach ($events as $event) {
     }
     continue;
   }
-  
+*/ 
   
 
   // ユーザーの情報がデータベースに存在しない時
