@@ -9,7 +9,7 @@ $destinationImage = imagecreatefrompng('imgs/reversi_board.png');
 // パラメーターから現在の石の配置を取得
 $stones = json_decode(explode('|', $_REQUEST['stones'])[0]);
 // パラメーターから前ターンの石の配置を取得
-$lastStones = json_decode(explode('|', $REQUEST['stones'][1]));
+$lastStones = json_decode(explode('|', $_REQUEST['stones'][1]));
 
 // 現在置かれている石の総数を取得
 $stoneCount = 0;
@@ -38,7 +38,7 @@ foreach ($lastStones as $array) {
 //前ターンの合成済み画像が保存されていれば
 if(file_exists('./tmp/' . $lastStoneCount . '/' . json_encode($lastStones) . '.png')) {
   // 保存されてた画像を合成のベースに変更
-  $destinationImage = imagecreate('./tmp/', $lastStoneCount . '/' . json_encode($lastStones) . '.png');
+  $destinationImage = imagecreate('./tmp/' . $lastStoneCount . '/' . json_encode($lastStones) . '.png');
 
 
 
@@ -109,14 +109,14 @@ if ($lastStones != null) {
 // リクエストされているサイズを取得
 $size = $_REQUEST['size'];
 // ベースサイズ（７００）と同じならなにもしない
-if ($size = GD_BASE_SIZE) {
+if ($size == GD_BASE_SIZE) {
   $out = $destinationImage;
 // 違うサイズの場合
 } else {
   // リクエストされたサイズの空画像を作成
   $out = imagecreatetruecolor($size, $size);
   // リサイズしながら合成
-  imagecopyresampled($out, $destinationImage, 0,0,0,0, $size, $size, GD_BASE_SIZE, GD_BASE_SIZE);
+  imagecopyresampled($out, $destinationImage, 0, 0, 0, 0, $size, $size, GD_BASE_SIZE, GD_BASE_SIZE);
 }
 
 ob_start();
