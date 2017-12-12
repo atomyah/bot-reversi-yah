@@ -107,13 +107,14 @@ foreach ($events as $event) {
     // ユーザーをデータベースに登録
     registerUser($event->getUserId(), json_encode($stones));
     // Imagemapを返信
-    replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+    replyImagemap($bot, $event->getReplyToken(), '盤面', $stones, NULL);
     // 以降の処理をスキップ
     continue;
   // 存在する時
   } else {
     // データベースから現在の石の配置を取得
     $stones = getStonesByUserId($event->getUserId());
+    $lastStones = $stones;
   }
   
   // 入力されたテキストを[行,列]の配列に変換
@@ -149,7 +150,7 @@ foreach ($events as $event) {
  }
 
   // Imagemapを返信
-  replyImagemap($bot, $event->getReplyToken(), '盤面', $stones);
+  replyImagemap($bot, $event->getReplyToken(), '盤面', $stones, $lastStones);
 
 }  
 
@@ -386,7 +387,7 @@ function placeAIStone(&$stones) {
 
 
 //イメージマップ作成ファンクション
-  function replyImagemap($bot, $replyToken, $alternativeText, $stones) {
+  function replyImagemap($bot, $replyToken, $alternativeText, $stones, $lastStones) {
    // アクションの配列
     $actionArray = array();
     
@@ -412,7 +413,7 @@ function placeAIStone(&$stones) {
     
     //imagemapMessageBuilder、つまりベースの画像を作る
     $imagemapMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImagemapMessageBuilder (
-            'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones)) . '/' .uniqid(),
+            'https://' . $_SERVER['HTTP_HOST'] . '/images/' . urlencode(json_encode($stones) . '|' . json_encode($lastStones)) . '/' .uniqid(),
              $alternativeText,
              new \LINE\LINEBot\MessageBuilder\Imagemap\BaseSizeBuilder(1040, 1040),
              $actionArray //エリアとアクションの配列
