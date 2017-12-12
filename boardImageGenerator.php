@@ -24,7 +24,7 @@ foreach ($stones as $array) {
 // 前のターンに置かれていた石の総数を取得
 $lastStoneCount = 0;
 foreach ($lastStones as $array) {
-  foreach ($array as $laststone) {
+  foreach ($array as $stone) {
     if($stone > 0) {
       $lastStoneCount++;
     }
