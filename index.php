@@ -214,7 +214,7 @@ function endGame($bot, $replyToken, $userId, $stones) {
   if($white == $black) {
     $message = '引き分け！' . sprintf('White : %d、 Black : %d', $white, $black);
   } else {
-    $message = ($white > $black ? 'You' : 'Bot') . ' win!' . sprintf('白 : %d、 黒 : %d', $white, $black);
+    $message = ($white > $black ? 'You win!' : 'Bot win! You loser!') . sprintf('白 : %d、 黒 : %d', $white, $black);
   }
 
   // 盤面とダミーエリアのみのImagemapを生成
@@ -234,8 +234,8 @@ function endGame($bot, $replyToken, $userId, $stones) {
   $textMessage = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
   // スタンプのメッセージ
   $stickerMessage = ($white >= $black)
-    ? new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(2, 28)
-    : new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(3, 225);
+    ? new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(4, 292)
+    : new \LINE\LINEBot\MessageBuilder\StickerMessageBuilder(2, 173);
   // データベースからユーザーを削除
   deleteUser($userId);
   // Imagemap、テキスト、スタンプを返信
